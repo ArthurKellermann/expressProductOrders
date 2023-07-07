@@ -7,7 +7,7 @@ const Product = require('../models/product');
 
 router.get('/', checkAuth, (req, res) => {
     Order.find()
-        .select('_id productId quantity')
+        .select('_id productId quantity status')
         .then(result => {
             return res.status(201).json({
                 count: result.length,
@@ -16,6 +16,7 @@ router.get('/', checkAuth, (req, res) => {
                         _id: doc._id,
                         productId: doc.productId,
                         quantity: doc.quantity,
+                        status: doc.status,
                         request: {
                             type: 'GET',
                             url: 'http:localhost:3000/orders' + doc._id
@@ -77,6 +78,28 @@ router.get('/:id', checkAuth, (req, res) => {
         });
 
 
+});
+
+router.patch('/:id', checkAuth, (req, res) => {
+    const id = req.params.id;
+    const newStatus = req.body.newStatus;
+    Order.findByIdAndUpdate(id, { status: newStatus }, { new: true }).then(order => {
+        if (order) {
+            return res.status(200).json({
+                message: 'Updated order',
+                newStatus: order.status,
+                request: {
+                    type: 'GET',
+                    url: 'http://localhost:3000/orders/' + id
+                }
+            });
+        } else {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+    }).catch(e => {
+        console.log(e);
+        return res.status(500).json({ error: e });
+    });
 });
 
 router.delete('/:id', checkAuth, (req, res) => {
