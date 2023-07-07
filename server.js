@@ -6,9 +6,9 @@ const mongoose = require('mongoose');
 
 require('dotenv').config();
 
-const products_routes = require('./routes/products').products;
-const orders_routes = require('./routes/orders').orders;
-const users_routes = require('./routes/users').users;
+const products_routes = require('./src/routes/products').products;
+const orders_routes = require('./src/routes/orders').orders;
+const users_routes = require('./src/routes/users').users;
 
 //Database Connection
 mongoose.connect(process.env.CONNECTIONSTRING, { useNewUrlParser: true, useUnifiedTopology: true })
