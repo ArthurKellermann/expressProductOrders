@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const checkAuth = require('./middlewares/check_auth');
 
 const Order = require('../models/order');
 const Product = require('../models/product');
 
-router.get('/', (req, res) => {
+router.get('/', checkAuth, (req, res) => {
     Order.find()
         .select('_id productId quantity')
         .then(result => {
@@ -31,7 +32,7 @@ router.get('/', (req, res) => {
         });
 });
 
-router.post('/', (req, res) => {
+router.post('/', checkAuth, (req, res) => {
     Product.findById(req.body.productId)
         .then(product => {
             if (!product) return res.status(404).json({ message: 'Product not found' });
@@ -57,7 +58,7 @@ router.post('/', (req, res) => {
         });
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', checkAuth, (req, res) => {
     const id = req.params.id;
     Order.findById(id)
         .then(result => {
@@ -78,7 +79,7 @@ router.get('/:id', (req, res) => {
 
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', checkAuth, (req, res) => {
     const id = req.params.id;
     Order.findByIdAndDelete(id)
         .then(() => {

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const upload = require('../config/files');
+const checkAuth = require('./middlewares/check_auth');
 const Product = require('../models/product');
 
 router.get('/', (req, res) => {
@@ -30,7 +31,7 @@ router.get('/', (req, res) => {
         });
 });
 
-router.post('/', upload.single('productImage'), (req, res) => {
+router.post('/', upload.single('productImage'), checkAuth, (req, res) => {
     const product = new Product({
         name: req.body.name,
         price: req.body.price,
@@ -84,7 +85,7 @@ router.get('/:id', (req, res) => {
         });
 });
 
-router.patch('/:id', (req, res) => {
+router.patch('/:id', checkAuth, (req, res) => {
     const id = req.params.id;
     const updateOps = {};
     for (const ops of req.body) {
@@ -92,7 +93,7 @@ router.patch('/:id', (req, res) => {
         // [ { "propName": "price", "value": 20.00 } ]  
     }
     Product.updateOne({ _id: id }, { $set: updateOps })
-        .then(result => {
+        .then(() => {
             return res.status(200).json({
                 message: 'Product updated!',
                 request: {
@@ -107,10 +108,10 @@ router.patch('/:id', (req, res) => {
         });
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', checkAuth, (req, res) => {
     const id = req.params.id;
     Product.findByIdAndDelete(id)
-        .then(result => {
+        .then(() => {
             return res.status(200).json({
                 message: 'Product deleted!',
                 request: {
