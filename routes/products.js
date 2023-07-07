@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const upload = require('../config/files');
-const Product = require('../models/products');
-
+const Product = require('../models/product');
 
 router.get('/', (req, res) => {
     Product.find()

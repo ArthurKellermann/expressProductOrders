@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const Order = require('../models/orders');
-const Product = require('../models/products');
+const Order = require('../models/order');
+const Product = require('../models/product');
 
 router.get('/', (req, res) => {
     Order.find()

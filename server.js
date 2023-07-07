@@ -8,6 +8,7 @@ require('dotenv').config();
 
 const products_routes = require('./routes/products').products;
 const orders_routes = require('./routes/orders').orders;
+const users_routes = require('./routes/users').users;
 
 //Database Connection
 mongoose.connect(process.env.CONNECTIONSTRING, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -36,6 +37,7 @@ app.use((req, res, next) => {
 //Routes
 app.use('/products', products_routes);
 app.use('/orders', orders_routes);
+app.use('/user', users_routes);
 
 
 app.use((req, res, next) => {
